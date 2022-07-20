@@ -14,6 +14,8 @@ router.get('/user-report/:uid', userController.userReport);
 
 router.get('/paginated-users', userController.getPaginatedUsers);
 
+router.get('/user-details/:id', userController.userData);
+
 router.post('/login', [
     check('email').isEmail(),
     check('password').not().isEmpty()

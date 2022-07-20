@@ -316,6 +316,20 @@ const userReport = (req, res, next) => {
     });
 };
 
+const userData = (req, res, next) => {
+    const id = req.params.id;
+
+    const getUserData = 'SELECT id, email, user_img, name, father, cnic, mobile, address, khilafatText, bday, khilafat, murshad, certificate, joining, job, role FROM user WHERE id=?;'
+    db.query(getUserData, id, (err, response) => {
+        if (err) {
+            console.log({ error });
+            return next(new HttpError('Error fetching data from database', 500));
+        }
+
+        res.json({ user_details: response });
+    });
+};
+
 exports.loginUser = loginUser;
 exports.registerUser = registerUser;
 exports.getAllUsers = getAllUsers;
@@ -324,3 +338,4 @@ exports.deleteUser = deleteUser;
 exports.getPaginatedUsers = getPaginatedUsers;
 exports.userReport = userReport;
 exports.editUserDetails = editUserDetails;
+exports.userData = userData;
