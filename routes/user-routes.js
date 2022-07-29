@@ -45,7 +45,6 @@ router.patch('/edit-user/:uid', fileUpload.fields([{ name: 'certificate', maxCou
     check('address').not().isEmpty(),
     check('khilafatText').not().isEmpty(),
     check('bday').not().isEmpty(),
-    check('khilafat').not().isEmpty(),
     check('murshad').not().isEmpty(),
     check('joining').not().isEmpty(),
     check('job').not().isEmpty(),

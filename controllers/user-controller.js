@@ -102,7 +102,6 @@ const editUserDetails = async (req, res, next) => {
         address,
         khilafatText,
         bday,
-        khilafat,
         murshad,
         joining,
         job,
@@ -116,8 +115,8 @@ const editUserDetails = async (req, res, next) => {
         return next(new HttpError('Password hashing failed. Try again', 500));
     }
 
-    const updateUserDetails = 'UPDATE user SET email=?, user_img=?, name=?, father=?, cnic=?, mobile=?, address=?, khilafatText=?, bday=?, khilafat=?, murshad=?, certificate=?, joining=?, job=?, role=?, password=? WHERE id=?;'
-    db.query(updateUserDetails, [email, req.files.fileName[0].path, name, father, cnic, mobile, address, khilafatText, bday, khilafat, murshad, req.files.certificate[0].path, joining, job, role, hashedPassword, uid], (err, response) => {
+    const updateUserDetails = 'UPDATE user SET email=?, user_img=?, name=?, father=?, cnic=?, mobile=?, address=?, khilafatText=?, bday=?, murshad=?, certificate=?, joining=?, job=?, role=?, password=? WHERE id=?;'
+    db.query(updateUserDetails, [email, req.files.fileName[0].path, name, father, cnic, mobile, address, khilafatText, bday, murshad, req.files.certificate[0].path, joining, job, role, hashedPassword, uid], (err, response) => {
         if (err) {
             console.log(err);
             return next(new HttpError('Error fetching data from database', 500));
