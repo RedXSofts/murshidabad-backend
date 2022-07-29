@@ -53,7 +53,6 @@ const registerUser = async (req, res, next) => {
         address,
         khilafatText,
         bday,
-        khilafat,
         murshad,
         joining,
         job,
@@ -78,8 +77,8 @@ const registerUser = async (req, res, next) => {
             return next(new HttpError('Password hashing failed. Try again', 500));
         }
 
-        const userRegistration = 'INSERT INTO user (email, user_img, name, father, cnic, mobile, address, khilafatText, bday, khilafat, murshad, certificate, joining, job, role, password) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-        db.query(userRegistration, [email, req.files.fileName[0].path, name, father, cnic, mobile, address, khilafatText, bday, khilafat, murshad, req.files.certificate[0].path, joining, job, role, hashedPassword], (err, result) => {
+        const userRegistration = 'INSERT INTO user (email, user_img, name, father, cnic, mobile, address, khilafatText, bday, murshad, certificate, joining, job, role, password) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+        db.query(userRegistration, [email, req.files.fileName[0].path, name, father, cnic, mobile, address, khilafatText, bday, murshad, req.files.certificate[0].path, joining, job, role, hashedPassword], (err, result) => {
             if (err) {
                 console.log(err);
                 return next(new HttpError(err, 500));

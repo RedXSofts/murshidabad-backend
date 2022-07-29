@@ -30,7 +30,6 @@ router.post('/register', fileUpload.fields([{ name: 'certificate', maxCount: 1 }
     check('address').not().isEmpty(),
     check('khilafatText').not().isEmpty(),
     check('bday').not().isEmpty(),
-    check('khilafat').not().isEmpty(),
     check('murshad').not().isEmpty(),
     check('joining').not().isEmpty(),
     check('job').not().isEmpty(),
