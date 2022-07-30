@@ -40,7 +40,7 @@ const loginUser = async (req, res, next) => {
         try {
             token = jwt.sign({ userId: response[0].id, email: response[0].email },
                 process.env.JWT_KEY,
-                { expiresIn: '1h' });
+                { expiresIn: '5h' });
         } catch (err) {
             return next(new HttpError('Signup failed', 500));
         }
