@@ -189,7 +189,7 @@ const getAllReports = (req, res, next) => {
     const buildHierarchyCollection = flatItems => {
         const result = [], store = {};
         for (const { id, text, p_id } of flatItems) {
-            store[id] = { id, text, expanded: true, };
+            store[id] = { id, text, expanded: false, };
             const parentItemInStore = store[p_id];
             if (!p_id)
                 result.push(store[id]);
@@ -288,7 +288,7 @@ const userReport = (req, res, next) => {
     const buildHierarchyCollection = flatItems => {
         const result = [], store = {};
         for (const { id, text, p_id } of flatItems) {
-            store[id] = { id, text, expanded: true, };
+            store[id] = { id, text, expanded: false, };
             const parentItemInStore = store[p_id];
             if (!p_id)
                 result.push(store[id]);
