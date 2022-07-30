@@ -1,6 +1,9 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const db = require('../helpers/db-config');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 const HttpError = require('../helpers/http-error');
 
@@ -23,7 +26,7 @@ const loginUser = async (req, res, next) => {
         }
         let validPassword;
         try {
-            validPassword = await bcrypt.compare(password, existingUser.password)
+            validPassword = await bcrypt.compare(password, response[0].password)
         } catch (error) {
             console.log(error);
             return next(new HttpError('Password hashing error', 500))
@@ -33,7 +36,16 @@ const loginUser = async (req, res, next) => {
             return next(new HttpError('Incorrect password', 401));
         }
 
-        res.json({ id: existingUser.id, email: existingUser.email, user_img: existingUser.user_img, name: existingUser.name, father: existingUser.father, cnic: existingUser.cnic, mobile: existingUser.mobile, address: existingUser.address, khilafatText: existingUser.khilafatText, bday: existingUser.bday, khilafat: existingUser.khilafat, murshad: existingUser.murshad, certificate: existingUser.certificate, joining: existingUser.joining, job: existingUser.job, role: existingUser.role });
+        let token;
+        try {
+            token = jwt.sign({ userId: response[0].id, email: response[0].email },
+                process.env.JWT_KEY,
+                { expiresIn: '1h' });
+        } catch (err) {
+            return next(new HttpError('Signup failed', 500));
+        }
+
+        res.json({ id: response[0].id, email: response[0].email, user_img: response[0].user_img, name: response[0].name, father: response[0].father, cnic: response[0].cnic, mobile: response[0].mobile, address: response[0].address, khilafatText: response[0].khilafatText, bday: response[0].bday, khilafat: response[0].khilafat, murshad: response[0].murshad, certificate: response[0].certificate, joining: response[0].joining, job: response[0].job, role: response[0].role, token });
     });
 
 };
