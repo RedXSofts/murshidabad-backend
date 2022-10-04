@@ -28,7 +28,7 @@ const loginUser = async (req, res, next) => {
             validPassword = await bcrypt.compare(password, response[0].password)
         } catch (error) {
             console.log(error);
-            return next(new HttpError('Password hashing error', 500))
+            return next(new HttpError('Password hashing error', 500));
         }
 
         if (!validPassword) {
