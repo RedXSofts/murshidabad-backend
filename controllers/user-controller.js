@@ -4,7 +4,6 @@ const db = require('../helpers/db-config');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
 const HttpError = require('../helpers/http-error');
 
 const loginUser = async (req, res, next) => {
