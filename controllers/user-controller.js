@@ -37,11 +37,11 @@ const loginUser = async (req, res, next) => {
 
         let token;
         try {
-            token = jwt.sign({ userId: response[0].id, email: response[0].email },
+            token = jwt.sign({ userId: response[0].id },
                 process.env.JWT_KEY,
                 { expiresIn: '5h' });
         } catch (err) {
-            return next(new HttpError('Signup failed', 500));
+            return next(new HttpError('Login failed', 500));
         }
 
         res.json({ id: response[0].id, email: response[0].email, user_img: response[0].user_img, name: response[0].name, father: response[0].father, cnic: response[0].cnic, mobile: response[0].mobile, address: response[0].address, khilafatText: response[0].khilafatText, bday: response[0].bday, khilafat: response[0].khilafat, murshad: response[0].murshad, certificate: response[0].certificate, joining: response[0].joining, job: response[0].job, role: response[0].role, token });

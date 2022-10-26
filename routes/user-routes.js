@@ -3,7 +3,6 @@ const { check } = require('express-validator');
 
 const userController = require('../controllers/user-controller');
 const fileUpload = require('../middlewares/file-upload');
-const checkAuth = require('../middlewares/check-auth');
 
 const router = express.Router();
 
@@ -27,17 +26,17 @@ router.post('/register', fileUpload.fields([{ name: 'certificate', maxCount: 1 }
     check('role').not().isEmpty()
 ], userController.registerUser);
 
-router.get('/all-users', checkAuth, userController.getAllUsers);
+router.get('/all-users', userController.getAllUsers);
 
-router.get('/reports', checkAuth, userController.getAllReports);
+router.get('/reports', userController.getAllReports);
 
-router.get('/user-report/:uid', checkAuth, userController.userReport);
+router.get('/user-report/:uid', userController.userReport);
 
-router.get('/paginated-users', checkAuth, userController.getPaginatedUsers);
+router.get('/paginated-users', userController.getPaginatedUsers);
 
-router.get('/user-details/:id', checkAuth, userController.userData);
+router.get('/user-details/:id', userController.userData);
 
-router.patch('/edit-user/:uid', checkAuth, fileUpload.fields([{ name: 'certificate', maxCount: 1 }, { name: 'fileName', maxCount: 1 }]), [
+router.patch('/edit-user/:uid', fileUpload.fields([{ name: 'certificate', maxCount: 1 }, { name: 'fileName', maxCount: 1 }]), [
     check('email').isEmail(),
     check('name').not().isEmpty(),
     check('father').not().isEmpty(),
@@ -52,6 +51,6 @@ router.patch('/edit-user/:uid', checkAuth, fileUpload.fields([{ name: 'certifica
     check('role').not().isEmpty()
 ], userController.editUserDetails);
 
-router.delete('/remove-user/:id', checkAuth, userController.deleteUser);
+router.delete('/remove-user/:id', userController.deleteUser);
 
 module.exports = router;
