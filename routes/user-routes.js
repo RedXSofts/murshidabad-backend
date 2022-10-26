@@ -28,6 +28,8 @@ router.post('/register', fileUpload.fields([{ name: 'certificate', maxCount: 1 }
 
 router.get('/all-users', userController.getAllUsers);
 
+router.get('/viewer-users/:userId', userController.viewerUsers);
+
 router.get('/reports', userController.getAllReports);
 
 router.get('/user-report/:uid', userController.userReport);

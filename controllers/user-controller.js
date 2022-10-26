@@ -156,14 +156,14 @@ const getPaginatedUsers = (req, res, next) => {
 
     const nextPage = page * limit;
 
-    const allUsers = "SELECT * FROM user limit " + limit + " OFFSET " + offset;
+    const allUsers = "SELECT * FROM user WHERE role != 0 limit " + limit + " OFFSET " + offset;
     db.query(allUsers, (err, response) => {
         if (err) {
             console.log(err);
             return next(new HttpError('Error fetching data from database', 500));
         }
 
-        const nextPageData = "SELECT * FROM user limit " + limit + " OFFSET " + nextPage;
+        const nextPageData = "SELECT * FROM user WHERE role != 0 limit " + limit + " OFFSET " + nextPage;
         db.query(nextPageData, (err, result) => {
             if (err) {
                 console.log(err);
@@ -339,6 +339,34 @@ const userData = (req, res, next) => {
     });
 };
 
+const viewerUsers = (req, res, next) => {
+    const userId = req.params.userId;
+
+    const limit = 10;
+    const page = req.query.page;
+    const offset = (page - 1) * limit;
+
+    const nextPage = page * limit;
+
+    const viewerUsersQuery = "SELECT id, email, user_img, name, father, cnic, mobile, address, khilafatText, bday, murshad, certificate, joining, job, role FROM user WHERE murshad=? limit " + limit + " OFFSET " + offset;
+    db.query(viewerUsersQuery, userId, (err, response) => {
+        if (err) {
+            console.log({ err });
+            return next(new HttpError('Error fetching data from database', 500));
+        }
+
+        const nextViewersUsersQuery = "SELECT id, email, user_img, name, father, cnic, mobile, address, khilafatText, bday, murshad, certificate, joining, job, role FROM user WHERE murshad=? limit " + limit + " OFFSET " + nextPage;
+        db.query(nextViewersUsersQuery, userId, (err, result) => {
+            if (err) {
+                console.log(err);
+                return next(new HttpError('Error fetching data from database', 500));
+            }
+
+            res.json({ user_details: { products_page_count: response.length, 'page_number': page, nextData: result.length, users: response } });
+        });
+    });
+};
+
 exports.loginUser = loginUser;
 exports.registerUser = registerUser;
 exports.getAllUsers = getAllUsers;
@@ -348,3 +376,4 @@ exports.getPaginatedUsers = getPaginatedUsers;
 exports.userReport = userReport;
 exports.editUserDetails = editUserDetails;
 exports.userData = userData;
+exports.viewerUsers = viewerUsers;
