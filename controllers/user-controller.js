@@ -138,7 +138,7 @@ const editUserDetails = async (req, res, next) => {
 };
 
 const getAllUsers = (req, res, next) => {
-    const allUsers = 'SELECT id, name FROM user;'
+    const allUsers = 'SELECT id, name FROM user WHERE role != 0;'
     db.query(allUsers, (err, response) => {
         if (err) {
             console.log(err);
