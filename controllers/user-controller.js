@@ -319,6 +319,7 @@ const userReport = (req, res, next) => {
             return next(new HttpError('Error fetching data from database', 500));
         }
 
+        root[0].p_id = 0;
         const finalResult = root !== undefined ? buildHierarchyCollection([...root, ...response]) : [];
 
         res.json({ report: finalResult });
@@ -367,6 +368,53 @@ const viewerUsers = (req, res, next) => {
     });
 };
 
+const resetPassword = (req, res, next) => {
+    const uid = req.params.uid;
+
+    const { oldPassword, newPassword } = req.body;
+
+    const userQuery = "SELECT * FROM user WHERE id=?;"
+    db.query(userQuery, uid, async (err, response) => {
+        if (err) {
+            console.log(err);
+            return next(new HttpError('Error fetching data from database', 500));
+        }
+
+        if (!response.length) {
+            return next(new HttpError('No user found against the details', 400));
+        }
+
+        let validPassword;
+        try {
+            validPassword = await bcrypt.compare(oldPassword, response[0].password)
+        } catch (error) {
+            console.log(error);
+            return next(new HttpError('Password hashing error', 500));
+        }
+
+        if (!validPassword) {
+            return next(new HttpError('Incorrect old password', 401));
+        }
+
+        let hashedPassword;
+        try {
+            hashedPassword = await bcrypt.hash(newPassword, 12);
+        } catch (error) {
+            return next(new HttpError('Password hashing failed. Try again', 500));
+        }
+
+        const updateUserQuery = "UPDATE user SET password=? WHERE id=?;"
+        db.query(updateUserQuery, [hashedPassword, uid], (err, resp) => {
+            if (err) {
+                console.log(err);
+                return next(new HttpError('Error fetching data from database', 500));
+            }
+
+            res.json({ message: 'User password reset successful' });
+        });
+    });
+};
+
 exports.loginUser = loginUser;
 exports.registerUser = registerUser;
 exports.getAllUsers = getAllUsers;
@@ -377,3 +425,4 @@ exports.userReport = userReport;
 exports.editUserDetails = editUserDetails;
 exports.userData = userData;
 exports.viewerUsers = viewerUsers;
+exports.resetPassword = resetPassword;

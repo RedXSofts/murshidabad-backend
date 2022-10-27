@@ -53,6 +53,11 @@ router.patch('/edit-user/:uid', fileUpload.fields([{ name: 'certificate', maxCou
     check('role').not().isEmpty()
 ], userController.editUserDetails);
 
+router.patch('/reset-password/:uid', [
+    check('oldPassword').not().isEmpty(),
+    check('newPassword').not().isEmpty(),
+], userController.resetPassword);
+
 router.delete('/remove-user/:id', userController.deleteUser);
 
 module.exports = router;
