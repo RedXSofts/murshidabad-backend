@@ -309,20 +309,19 @@ const userReport = (req, res, next) => {
             console.log({ err });
             return next(new HttpError('Error fetching data from database', 500));
         }
-        root = resp
-    });
+        root = resp;
 
-    const existingUserChild = 'SELECT id as id, name as text, murshad as p_id from user WHERE murshad=?;'
-    db.query(existingUserChild, uid, (err, response) => {
-        if (err) {
-            console.log({ error });
-            return next(new HttpError('Error fetching data from database', 500));
-        }
+        const existingUserChild = 'SELECT id as id, name as text, murshad as p_id from user WHERE murshad=?;'
+        db.query(existingUserChild, uid, (err, response) => {
+            if (err) {
+                console.log({ error });
+                return next(new HttpError('Error fetching data from database', 500));
+            }
+            root[0].p_id = 0;
+            const finalResult = root !== undefined ? buildHierarchyCollection([...root, ...response]) : [];
 
-        root[0].p_id = 0;
-        const finalResult = root !== undefined ? buildHierarchyCollection([...root, ...response]) : [];
-
-        res.json({ report: finalResult });
+            res.json({ report: finalResult });
+        });
     });
 };
 
