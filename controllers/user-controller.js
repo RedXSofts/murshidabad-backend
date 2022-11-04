@@ -138,7 +138,7 @@ const editUserDetails = async (req, res, next) => {
 };
 
 const getAllUsers = (req, res, next) => {
-    const allUsers = 'SELECT id, name FROM user WHERE role != 0;'
+    const allUsers = 'SELECT id, name FROM user;'
     db.query(allUsers, (err, response) => {
         if (err) {
             console.log(err);
@@ -180,8 +180,10 @@ const getAllReports = (req, res, next) => {
     const resolveParrentMissing = (store, currentItem) => {
         for (let [key, value] of Object.entries(store))
             if (value.p_id == currentItem.id) {
-                currentItem.children ??= [];
-                currentItem.children.push(value);
+                if (!currentItem.children) {
+                    currentItem.children = [];
+                    currentItem.children.push(value);
+                }
             }
     }
 
@@ -193,8 +195,10 @@ const getAllReports = (req, res, next) => {
             if (!p_id)
                 result.push(store[id]);
             else if (parentItemInStore) {
-                parentItemInStore.children ??= [];
-                parentItemInStore.children.push(store[id]);
+                if (!parentItemInStore.children) {
+                    parentItemInStore.children = [];
+                    parentItemInStore.children.push(store[id]);
+                }
             }
 
             resolveParrentMissing(store, store[id]);
@@ -279,8 +283,10 @@ const userReport = (req, res, next) => {
     const resolveParrentMissing = (store, currentItem) => {
         for (let [key, value] of Object.entries(store))
             if (value.p_id == currentItem.id) {
-                currentItem.children ??= [];
-                currentItem.children.push(value);
+                if (!currentItem.children) {
+                    currentItem.children = [];
+                    currentItem.children.push(value);
+                }
             }
     }
 
@@ -292,8 +298,10 @@ const userReport = (req, res, next) => {
             if (!p_id)
                 result.push(store[id]);
             else if (parentItemInStore) {
-                parentItemInStore.children ??= [];
-                parentItemInStore.children.push(store[id]);
+                if (!parentItemInStore.children) {
+                    parentItemInStore.children = [];
+                    parentItemInStore.children.push(store[id]);
+                }
             }
 
             resolveParrentMissing(store, store[id]);
